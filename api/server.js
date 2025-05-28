@@ -2,62 +2,58 @@ const express = require('express');
 const Web3 = require('web3');
 const cors = require('cors');
 
-
-
-const PRIVATE_KEY = '70a2a3ccdda50314d92e0ebf6596ef95943d1fc352c9c470fdbc688acddb4316'; // Replace this with your backend account key
+const PRIVATE_KEY = '70a2a3ccdda50314d92e0ebf6596ef95943d1fc352c9c470fdbc688acddb4316';
 const CONTRACT_ADDRESS = '0x0003f045459580fff5C9c987E747d73C86502bbb';
 const CONTRACT_ABI = [
-	
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "player",
-				"type": "address"
-			},
-			{
-				"internalType": "int256",
-				"name": "prediction",
-				"type": "int256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "placeBet",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "int256",
-				"name": "actualPrice",
-				"type": "int256"
-			}
-		],
-		"name": "resolveRound",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
+      },
+      {
+        "internalType": "int256",
+        "name": "prediction",
+        "type": "int256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "placeBet",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int256",
+        "name": "actualPrice",
+        "type": "int256"
+      }
+    ],
+    "name": "resolveRound",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
 ];
 const RPC_URL = 'https://testnet.hashio.io/api';
 
@@ -65,7 +61,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: 'https://btcdapp.netlify.app',
+  origin: 'https://btcdapp.netlify.app'
 }));
 
 // Set up web3 and contract
@@ -79,7 +75,7 @@ let lastNonce = null;
 
 async function getSafeNonce() {
   while (nonceLock) {
-    await new Promise((resolve) => setTimeout(resolve, 50)); // wait 50ms
+    await new Promise((resolve) => setTimeout(resolve, 50));
   }
 
   nonceLock = true;
@@ -123,5 +119,4 @@ app.post('/place-bet', async (req, res) => {
   }
 });
 
-
-app.listen(3001, () => console.log('Server running on port 3001')); 
+app.listen(3001, () => console.log('Server running on port 3001'));
