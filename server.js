@@ -97,11 +97,7 @@ async function getSafeNonce() {
 }
 
 // POST endpoint to place a bet
-module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Only POST supported' });
-  }
-
+app.post('/place-bet', async (req, res) => {
   const { playerAddress, prediction, betAmount } = req.body;
 
   if (!playerAddress || prediction === undefined || !betAmount) {
@@ -110,7 +106,8 @@ module.exports = async (req, res) => {
 
   try {
     const depositAmountTinybars = Number(betAmount) * 10 ** 8;
-    const nonce = await web3.eth.getTransactionCount(backendAccount.address, 'pending');
+
+    const nonce = await getSafeNonce();
 
     const tx = await contract.methods.placeBet(playerAddress, prediction, depositAmountTinybars)
       .send({
@@ -119,9 +116,12 @@ module.exports = async (req, res) => {
         nonce,
       });
 
-    res.status(200).json({ success: true, txHash: tx.transactionHash });
+    res.json({ success: true, txHash: tx.transactionHash });
   } catch (err) {
-    console.error('Error in place-bet:', err);
+    console.error('Backend placeBet failed:', err);
     res.status(500).json({ error: 'Bet failed', message: err.message });
   }
-};
+});
+
+
+app.listen(3001, () => console.log('Server running on port 3001')); 
