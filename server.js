@@ -501,14 +501,17 @@ const RPC_URL = 'https://testnet.hashio.io/api';
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: 'https://btcdapp.netlify.app/',
-}));
-app.use(cors({
-  origin: 'http://localhost:3000',
-}));
+const allowedOrigins = ['https://btcdapp.netlify.app', 'http://localhost:3000'];
 
-
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 // Set up web3 and contract
 const web3 = new Web3(new Web3.providers.HttpProvider(RPC_URL));
 const backendAccount = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
