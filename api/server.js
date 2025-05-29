@@ -59,7 +59,7 @@ const RPC_URL = 'https://testnet.hashio.io/api';
 
 const app = express();
 app.use(express.json());
-
+const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: 'https://btcdapp.netlify.app'
 }));
@@ -119,4 +119,6 @@ app.post('/place-bet', async (req, res) => {
   }
 });
 
-app.listen(3001, () => console.log('Server running on port 3001'));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
