@@ -1,7 +1,6 @@
 const express = require('express');
-
+const Web3 = require('web3');
 const cors = require('cors');
-
 
 const app = express();
 app.use(express.json());
