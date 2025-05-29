@@ -76,6 +76,27 @@ const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
 let nonceLock = false;
 let lastNonce = null;
 
+
+async function getSafeNonce() {
+  while (nonceLock) {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+
+  nonceLock = true;
+
+  if (lastNonce === null) {
+    lastNonce = await web3.eth.getTransactionCount(backendAccount.address, 'pending');
+  } else {
+    lastNonce += 1;
+  }
+
+  const safeNonce = lastNonce;
+  nonceLock = false;
+
+  return safeNonce;
+}
+
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
