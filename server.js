@@ -97,6 +97,10 @@ async function getSafeNonce() {
   return safeNonce;
 }
 
+app.get('/place-bet', (req, res) => {
+  res.send('✅ Backend is running successfully!');
+});
+
 
 app.post('/place-bet', async (req, res) => {
   const { playerAddress, prediction, betAmount } = req.body;
