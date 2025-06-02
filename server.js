@@ -5,7 +5,7 @@ const cors = require('cors');
 
 
 const PRIVATE_KEY = '70a2a3ccdda50314d92e0ebf6596ef95943d1fc352c9c470fdbc688acddb4316';
-const CONTRACT_ADDRESS = '0xa0dcE312E7c1D308fEB699bc281010104BC3A7E1';
+const CONTRACT_ADDRESS = '0x3C6bCE73670c7eAD5f8923C2E2181A6f7dc8f19b';
 const CONTRACT_ABI = [
   {
     "inputs": [],
