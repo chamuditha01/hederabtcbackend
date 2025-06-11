@@ -64,7 +64,13 @@ app.use(express.json());
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: ['https://btcdapp1.netlify.app', 'http://localhost:3000','https://btcdapp2.netlify.app','https://btcdapp4.netlify.app']
+  origin: [
+    'https://btcdapp1.netlify.app',
+    'http://localhost:3000',
+    'https://btcdapp2.netlify.app',
+    'https://btcdapp4.netlify.app'
+  ],
+  credentials: true
 }));
 
 
