@@ -115,24 +115,25 @@ app.post('/place-bet', async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  try {
-    const depositAmountTinybars = Number(betAmount) * 10 ** 8;
+  // Generate a unique ID for this bet (UUID or timestamp-based)
+  const betId = Date.now().toString();
 
-    const nonce = await getSafeNonce();
+  // Save the request data to memory, DB, or queue
+  // For demo, save to a simple JS array (not for production)
+  pendingBets.push({
+    betId,
+    playerAddress,
+    prediction,
+    betAmount,
+  });
 
-    const tx = await contract.methods.placeBet(playerAddress, prediction, depositAmountTinybars)
-      .send({
-        from: backendAccount.address,
-        gas: 1200000,
-        nonce,
-      });
+  // Respond immediately
+  res.status(202).json({ message: 'Bet received and is being processed', betId });
 
-    res.json({ success: true, txHash: tx.transactionHash });
-  } catch (err) {
-    console.error('Backend placeBet failed:', err);
-    res.status(500).json({ error: 'Bet failed', message: err.message });
-  }
+  // Process in background (don't block the response)
+  processBetInBackground(playerAddress, prediction, betAmount);
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
