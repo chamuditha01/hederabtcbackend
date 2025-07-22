@@ -123,7 +123,7 @@ app.post('/place-bet', async (req, res) => {
     const tx = await contract.methods.placeBet(playerAddress, prediction, depositAmountTinybars)
       .send({
         from: backendAccount.address,
-        gas: 700000,
+        gas: 800000,
         nonce,
       });
 
