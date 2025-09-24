@@ -116,30 +116,30 @@ app.post('/place-bet', async (req, res) => {
   }
 
   try {
+    const roundedPrediction = Math.round(prediction);
+
     const depositAmountTinybars = Number(betAmount) * 10 ** 8;
 
-    const nonce = await web3.eth.getTransactionCount(backendAccount.address, 'pending');
+    // Use your getSafeNonce() function to handle concurrent requests
+    const nonce = await getSafeNonce();
+    const gasPrice = await web3.eth.getGasPrice();
 
-
-    const gasPrice = await web3.eth.getGasPrice(); // dynamically fetch current price
-
-const tx = await contract.methods.placeBet(playerAddress, prediction, depositAmountTinybars)
-  .send({
-    from: backendAccount.address,
-    gas: 400000,
-    gasPrice,
-    nonce,
-  })
-  .on('transactionHash', (hash) => {
-    console.log('Transaction sent. Hash:', hash);
-  })
-  .on('receipt', (receipt) => {
-    console.log('Transaction mined. Receipt:', receipt);
-  })
-  .on('error', (err) => {
-    console.error('Transaction error:', err);
-  });
-
+    const tx = await contract.methods.placeBet(playerAddress, roundedPrediction, depositAmountTinybars)
+      .send({
+        from: backendAccount.address,
+        gas: 400000,
+        gasPrice,
+        nonce,
+      })
+      .on('transactionHash', (hash) => {
+        console.log('Transaction sent. Hash:', hash);
+      })
+      .on('receipt', (receipt) => {
+        console.log('Transaction mined. Receipt:', receipt);
+      })
+      .on('error', (err) => {
+        console.error('Transaction error:', err);
+      });
 
     res.json({ success: true, txHash: tx.transactionHash });
   } catch (err) {
